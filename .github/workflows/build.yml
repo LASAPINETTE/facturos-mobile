@@ -1,3 +1,4 @@
+yaml
 name: Build APK
 
 on:
@@ -33,8 +34,6 @@ jobs:
     - name: Build APK
       run: |
         buildozer init
-        sed -i 's/requirements = python3,kivy/requirements = python3,kivy,kivymd,requests,datetime,sqlite3,plyer,threading,matplotlib,fpdf,barcode,Pillow,pyzbar,socket,json,hashlib,uuid/' buildozer.spec
-        sed -i 's/# android.permissions = INTERNET/android.permissions = INTERNET, ACCESS_NETWORK_STATE, ACCESS_WIFI_STATE/' buildozer.spec
         buildozer android debug
     
     - name: Upload APK

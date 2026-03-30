@@ -1,0 +1,1225 @@
+#:kivy 2.0
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+
+<LoginScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(10)
+        canvas.before:
+            Color:
+                rgba: get_color_from_hex('#2c3e50')
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        
+        # Logo et titre
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.3
+            spacing: dp(10)
+            
+            Label:
+                text: 'FACTUROS'
+                font_size: dp(48)
+                bold: True
+                color: 1, 1, 1, 1
+            
+            Label:
+                text: 'Portail Captif Mobile'
+                font_size: dp(16)
+                color: 0.8, 0.8, 0.8, 1
+        
+        # Formulaire de connexion serveur
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.25
+            spacing: dp(5)
+            
+            Label:
+                text: 'CONNEXION SERVEUR'
+                font_size: dp(14)
+                bold: True
+                color: 0.2, 0.6, 0.9, 1
+                size_hint_y: 0.3
+            
+            Label:
+                text: 'Adresse IP:'
+                font_size: dp(12)
+                color: 1, 1, 1, 1
+                halign: 'left'
+                size_hint_y: 0.2
+            
+            TextInput:
+                id: server_input
+                text: '192.168.1.'
+                multiline: False
+                size_hint_y: 0.25
+                background_color: 1, 1, 1, 1
+                foreground_color: 0, 0, 0, 1
+            
+            Label:
+                text: 'Port:'
+                font_size: dp(12)
+                color: 1, 1, 1, 1
+                halign: 'left'
+                size_hint_y: 0.2
+            
+            TextInput:
+                id: port_input
+                text: '65432'
+                multiline: False
+                size_hint_y: 0.25
+                background_color: 1, 1, 1, 1
+                foreground_color: 0, 0, 0, 1
+        
+        # Séparateur
+        Label:
+            text: '-' * 30
+            size_hint_y: 0.02
+            color: 0.5, 0.5, 0.5, 1
+        
+        # Formulaire d'authentification
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.3
+            spacing: dp(5)
+            
+            Label:
+                text: 'AUTHENTIFICATION'
+                font_size: dp(14)
+                bold: True
+                color: 0.2, 0.6, 0.9, 1
+                size_hint_y: 0.2
+            
+            Label:
+                text: "Nom d'utilisateur:"
+                font_size: dp(12)
+                color: 1, 1, 1, 1
+                halign: 'left'
+                size_hint_y: 0.2
+            
+            TextInput:
+                id: username_input
+                text: ''
+                multiline: False
+                size_hint_y: 0.25
+                background_color: 1, 1, 1, 1
+                foreground_color: 0, 0, 0, 1
+            
+            Label:
+                text: 'Mot de passe:'
+                font_size: dp(12)
+                color: 1, 1, 1, 1
+                halign: 'left'
+                size_hint_y: 0.2
+            
+            TextInput:
+                id: password_input
+                text: ''
+                multiline: False
+                password: True
+                size_hint_y: 0.25
+                background_color: 1, 1, 1, 1
+                foreground_color: 0, 0, 0, 1
+        
+        # Bouton de connexion
+        Button:
+            id: connect_btn
+            text: 'SE CONNECTER AU PORTAIL'
+            size_hint_y: 0.1
+            background_color: 0.2, 0.6, 0.9, 1
+            font_size: dp(14)
+            bold: True
+            on_press: root.connect_to_server()
+        
+        # Label de statut
+        Label:
+            id: status_label
+            text: 'Prêt à se connecter'
+            size_hint_y: 0.05
+            font_size: dp(12)
+            color: 0.5, 0.5, 0.5, 1
+        
+        # Informations
+        Label:
+            text: "Utilisez vos identifiants serveur\n(admin/admin par défaut)"
+            font_size: dp(10)
+            color: 0.7, 0.7, 0.7, 1
+            size_hint_y: 0.05
+
+<DashboardScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        
+        # En-tête
+        BoxLayout:
+            size_hint_y: 0.1
+            canvas.before:
+                Color:
+                    rgba: get_color_from_hex('#3498db')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Label:
+                text: 'FACTUROS MOBILE'
+                font_size: dp(20)
+                bold: True
+                color: 1, 1, 1, 1
+            
+            Button:
+                text: 'Quitter'
+                size_hint_x: 0.15
+                background_color: 0.8, 0.2, 0.2, 1
+                font_size: dp(12)
+                bold: True
+                on_press: root.logout()
+        
+        # Contenu scrollable
+        ScrollView:
+            size_hint_y: 0.8
+            do_scroll_x: False
+            
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: dp(10)
+                padding: dp(10)
+                size_hint_y: None
+                height: self.minimum_height
+                
+                # Cartes KPI
+                GridLayout:
+                    cols: 2
+                    spacing: dp(10)
+                    size_hint_y: None
+                    height: dp(200)
+                    
+                    # CA aujourd'hui
+                    BoxLayout:
+                        orientation: 'vertical'
+                        padding: dp(10)
+                        canvas.before:
+                            Color:
+                                rgba: get_color_from_hex('#3498db')
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [dp(10)]
+                        
+                        Label:
+                            text: 'CA AUJOURD\'HUI'
+                            font_size: dp(12)
+                            bold: True
+                            color: 1, 1, 1, 1
+                            size_hint_y: 0.3
+                        
+                        Label:
+                            id: ca_today
+                            text: '0 Fbu'
+                            font_size: dp(18)
+                            bold: True
+                            color: 1, 1, 1, 1
+                            size_hint_y: 0.7
+                    
+                    # Ventes aujourd'hui
+                    BoxLayout:
+                        orientation: 'vertical'
+                        padding: dp(10)
+                        canvas.before:
+                            Color:
+                                rgba: get_color_from_hex('#2ecc71')
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [dp(10)]
+                        
+                        Label:
+                            text: 'VENTES'
+                            font_size: dp(12)
+                            bold: True
+                            color: 1, 1, 1, 1
+                            size_hint_y: 0.3
+                        
+                        Label:
+                            id: ventes_today
+                            text: '0'
+                            font_size: dp(18)
+                            bold: True
+                            color: 1, 1, 1, 1
+                            size_hint_y: 0.7
+                    
+                    # Stock faible
+                    BoxLayout:
+                        orientation: 'vertical'
+                        padding: dp(10)
+                        canvas.before:
+                            Color:
+                                rgba: get_color_from_hex('#f39c12')
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [dp(10)]
+                        
+                        Label:
+                            text: 'STOCK FAIBLE'
+                            font_size: dp(12)
+                            bold: True
+                            color: 1, 1, 1, 1
+                            size_hint_y: 0.3
+                        
+                        Label:
+                            id: stock_faible
+                            text: '0'
+                            font_size: dp(18)
+                            bold: True
+                            color: 1, 1, 1, 1
+                            size_hint_y: 0.7
+                    
+                    # Alertes
+                    BoxLayout:
+                        orientation: 'vertical'
+                        padding: dp(10)
+                        canvas.before:
+                            Color:
+                                rgba: get_color_from_hex('#e74c3c')
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [dp(10)]
+                        
+                        Label:
+                            text: 'ALERTES'
+                            font_size: dp(12)
+                            bold: True
+                            color: 1, 1, 1, 1
+                            size_hint_y: 0.3
+                        
+                        Label:
+                            id: alertes
+                            text: '0'
+                            font_size: dp(18)
+                            bold: True
+                            color: 1, 1, 1, 1
+                            size_hint_y: 0.7
+                
+                # Statistiques
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: dp(5)
+                    size_hint_y: None
+                    height: dp(90)
+                    canvas.before:
+                        Color:
+                            rgba: get_color_from_hex('#ecf0f1')
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(10)]
+                    
+                    BoxLayout:
+                        size_hint_y: 0.5
+                        padding: dp(10)
+                        
+                        Label:
+                            text: 'CA Mensuel:'
+                            font_size: dp(14)
+                            bold: True
+                            color: 0.2, 0.2, 0.2, 1
+                            size_hint_x: 0.5
+                            halign: 'left'
+                        
+                        Label:
+                            id: ca_mois
+                            text: '0 Fbu'
+                            font_size: dp(16)
+                            bold: True
+                            color: 0.2, 0.6, 0.9, 1
+                            size_hint_x: 0.5
+                            halign: 'right'
+                    
+                    BoxLayout:
+                        size_hint_y: 0.5
+                        padding: dp(10)
+                        
+                        Label:
+                            text: 'Factures:'
+                            font_size: dp(14)
+                            bold: True
+                            color: 0.2, 0.2, 0.2, 1
+                            size_hint_x: 0.5
+                            halign: 'left'
+                        
+                        Label:
+                            id: nb_factures
+                            text: '0'
+                            font_size: dp(16)
+                            bold: True
+                            color: 0.2, 0.6, 0.9, 1
+                            size_hint_x: 0.5
+                            halign: 'right'
+                
+                # Boutons d'action
+                GridLayout:
+                    cols: 2
+                    spacing: dp(10)
+                    size_hint_y: None
+                    height: dp(200)
+                    
+                    Button:
+                        text: 'VENTES'
+                        background_color: 0.2, 0.6, 0.9, 1
+                        font_size: dp(18)
+                        bold: True
+                        on_press: root.go_to_ventes()
+                    
+                    Button:
+                        text: 'PRODUITS'
+                        background_color: 0.3, 0.7, 0.4, 1
+                        font_size: dp(18)
+                        bold: True
+                        on_press: root.go_to_produits()
+                    
+                    Button:
+                        text: 'CLIENTS'
+                        background_color: 0.9, 0.5, 0.2, 1
+                        font_size: dp(18)
+                        bold: True
+                        on_press: root.go_to_clients()
+                    
+                    Button:
+                        text: 'ALERTES'
+                        background_color: 0.9, 0.3, 0.3, 1
+                        font_size: dp(18)
+                        bold: True
+                        on_press: root.go_to_alertes()
+        
+        # Barre de navigation
+        BoxLayout:
+            size_hint_y: 0.1
+            spacing: dp(2)
+            canvas.before:
+                Color:
+                    rgba: get_color_from_hex('#34495e')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Button:
+                text: 'ACCUEIL'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.2, 0.6, 0.9, 1
+                on_press: root.manager.current = 'dashboard'
+            
+            Button:
+                text: 'VENTES'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.3, 0.7, 0.4, 1
+                on_press: root.manager.current = 'ventes'
+            
+            Button:
+                text: 'PRODUITS'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.9, 0.5, 0.2, 1
+                on_press: root.manager.current = 'produits'
+            
+            Button:
+                text: 'CLIENTS'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.5, 0.5, 0.5, 1
+                on_press: root.manager.current = 'clients'
+
+<VentesScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        
+        # En-tête
+        BoxLayout:
+            size_hint_y: 0.1
+            canvas.before:
+                Color:
+                    rgba: get_color_from_hex('#3498db')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Button:
+                text: '<'
+                size_hint_x: 0.15
+                font_size: dp(20)
+                bold: True
+                background_color: 0.2, 0.4, 0.7, 1
+                on_press: root.manager.current = 'dashboard'
+            
+            Label:
+                text: 'VENTES'
+                font_size: dp(18)
+                bold: True
+                color: 1, 1, 1, 1
+            
+            Label:
+                size_hint_x: 0.15
+        
+        # Liste des ventes
+        ScrollView:
+            size_hint_y: 0.8
+            do_scroll_x: False
+            
+            BoxLayout:
+                id: ventes_list
+                orientation: 'vertical'
+                spacing: dp(5)
+                padding: dp(10)
+                size_hint_y: None
+                height: self.minimum_height
+        
+        # Barre de navigation
+        BoxLayout:
+            size_hint_y: 0.1
+            spacing: dp(2)
+            canvas.before:
+                Color:
+                    rgba: get_color_from_hex('#34495e')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Button:
+                text: 'ACCUEIL'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.2, 0.6, 0.9, 1
+                on_press: root.manager.current = 'dashboard'
+            
+            Button:
+                text: 'VENTES'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.3, 0.7, 0.4, 1
+                on_press: root.manager.current = 'ventes'
+            
+            Button:
+                text: 'NOUVEAU'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.9, 0.5, 0.2, 1
+                on_press: root.manager.current = 'nouvelle_vente'
+
+<NouvelleVenteAvanceeScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        
+        # En-tête
+        BoxLayout:
+            size_hint_y: 0.1
+            canvas.before:
+                Color:
+                    rgba: get_color_from_hex('#e67e22')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Button:
+                text: '<'
+                size_hint_x: 0.15
+                font_size: dp(20)
+                bold: True
+                background_color: 0.8, 0.5, 0.1, 1
+                on_press: root.confirm_quit()
+            
+            Label:
+                text: 'NOUVELLE VENTE'
+                font_size: dp(16)
+                bold: True
+                color: 1, 1, 1, 1
+            
+            Label:
+                size_hint_x: 0.15
+        
+        # Formulaire avec défilement
+        ScrollView:
+            size_hint_y: 0.8
+            do_scroll_x: False
+            
+            BoxLayout:
+                orientation: 'vertical'
+                padding: dp(10)
+                spacing: dp(10)
+                size_hint_y: None
+                height: self.minimum_height
+                
+                # Sélection client
+                Label:
+                    text: 'Client:'
+                    halign: 'left'
+                    bold: True
+                    font_size: dp(14)
+                    size_hint_y: None
+                    height: dp(30)
+                    color: 1, 1, 1, 1
+                
+                Spinner:
+                    id: client_spinner
+                    text: 'Choisir un client'
+                    values: []
+                    size_hint_y: None
+                    height: dp(40)
+                    background_color: 1, 1, 1, 1
+                    color: 0, 0, 0, 1
+                
+                # Sélection produit
+                Label:
+                    text: 'Produit:'
+                    halign: 'left'
+                    bold: True
+                    font_size: dp(14)
+                    size_hint_y: None
+                    height: dp(30)
+                    color: 1, 1, 1, 1
+                
+                Spinner:
+                    id: produit_spinner
+                    text: 'Choisir un produit'
+                    values: []
+                    size_hint_y: None
+                    height: dp(40)
+                    background_color: 1, 1, 1, 1
+                    color: 0, 0, 0, 1
+                
+                # Quantité
+                Label:
+                    text: 'Quantité:'
+                    halign: 'left'
+                    bold: True
+                    font_size: dp(14)
+                    size_hint_y: None
+                    height: dp(30)
+                    color: 1, 1, 1, 1
+                
+                TextInput:
+                    id: quantite_input
+                    text: '1'
+                    input_filter: 'int'
+                    multiline: False
+                    size_hint_y: None
+                    height: dp(40)
+                    background_color: 1, 1, 1, 1
+                    foreground_color: 0, 0, 0, 1
+                
+                # Boutons d'action pour le panier
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(50)
+                    spacing: dp(5)
+                    
+                    Button:
+                        text: 'AJOUTER'
+                        background_color: 0.3, 0.7, 0.4, 1
+                        bold: True
+                        font_size: dp(14)
+                        on_press: root.add_to_cart()
+                    
+                    Button:
+                        text: 'MODIFIER'
+                        background_color: 0.2, 0.6, 0.9, 1
+                        bold: True
+                        font_size: dp(14)
+                        on_press: root.prepare_modify_item()
+                    
+                    Button:
+                        text: 'SUPPRIMER'
+                        background_color: 0.9, 0.3, 0.3, 1
+                        bold: True
+                        font_size: dp(14)
+                        on_press: root.remove_from_cart()
+                
+                # Liste du panier
+                Label:
+                    text: 'PANIER:'
+                    halign: 'left'
+                    bold: True
+                    font_size: dp(16)
+                    size_hint_y: None
+                    height: dp(40)
+                    color: 1, 1, 1, 1
+                
+                BoxLayout:
+                    id: cart_list
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(2)
+                
+                # Mode de paiement
+                Label:
+                    text: 'Mode de paiement:'
+                    bold: True
+                    font_size: dp(14)
+                    size_hint_y: None
+                    height: dp(30)
+                    color: 1, 1, 1, 1
+                
+                Spinner:
+                    id: paiement_spinner
+                    text: 'Espèces'
+                    values: ['Espèces', 'Carte bancaire', 'Virement', 'Chèque', 'Paiement mobile']
+                    size_hint_y: None
+                    height: dp(40)
+                    background_color: 1, 1, 1, 1
+                    color: 0, 0, 0, 1
+                
+                # Statut
+                Label:
+                    text: 'Statut:'
+                    bold: True
+                    font_size: dp(14)
+                    size_hint_y: None
+                    height: dp(30)
+                    color: 1, 1, 1, 1
+                
+                Spinner:
+                    id: statut_spinner
+                    text: 'payée'
+                    values: ['payée', 'impayée', 'annulée', 'en attente', 'partiellement payée']
+                    size_hint_y: None
+                    height: dp(40)
+                    background_color: 1, 1, 1, 1
+                    color: 0, 0, 0, 1
+                
+                # Montant payé
+                Label:
+                    text: 'Montant payé (Fbu):'
+                    bold: True
+                    font_size: dp(14)
+                    size_hint_y: None
+                    height: dp(30)
+                    color: 1, 1, 1, 1
+                
+                TextInput:
+                    id: montant_paye_input
+                    text: '0'
+                    input_filter: 'float'
+                    multiline: False
+                    size_hint_y: None
+                    height: dp(40)
+                    background_color: 1, 1, 1, 1
+                    foreground_color: 0, 0, 0, 1
+                
+                # Reste à payer
+                Label:
+                    text: 'Reste à payer:'
+                    bold: True
+                    font_size: dp(14)
+                    size_hint_y: None
+                    height: dp(30)
+                    color: 1, 1, 1, 1
+                
+                Label:
+                    id: reste_label
+                    text: '0 Fbu'
+                    font_size: dp(18)
+                    bold: True
+                    color: 0.9, 0.3, 0.3, 1
+                    size_hint_y: None
+                    height: dp(30)
+                
+                # Total TTC
+                Label:
+                    text: 'Total TTC:'
+                    bold: True
+                    font_size: dp(16)
+                    size_hint_y: None
+                    height: dp(40)
+                    color: 1, 1, 1, 1
+                
+                Label:
+                    id: total_label
+                    text: 'Total TTC: 0 Fbu'
+                    font_size: dp(22)
+                    bold: True
+                    color: 0.2, 0.8, 0.2, 1
+                    size_hint_y: None
+                    height: dp(40)
+                
+                # Boutons d'action finaux
+                BoxLayout:
+                    size_hint_y: None
+                    height: dp(60)
+                    spacing: dp(5)
+                    
+                    Button:
+                        text: 'ANNULER LA VENTE'
+                        background_color: 0.8, 0.2, 0.2, 1
+                        bold: True
+                        font_size: dp(14)
+                        on_press: root.cancel_vente()
+                    
+                    Button:
+                        text: 'VALIDER LA VENTE'
+                        background_color: 0.2, 0.8, 0.2, 1
+                        bold: True
+                        font_size: dp(14)
+                        on_press: root.validate_vente()
+        
+        # Barre de navigation
+        BoxLayout:
+            size_hint_y: 0.1
+            spacing: dp(2)
+            canvas.before:
+                Color:
+                    rgba: get_color_from_hex('#34495e')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Button:
+                text: 'ACCUEIL'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.2, 0.6, 0.9, 1
+                on_press: root.manager.current = 'dashboard'
+            
+            Button:
+                text: 'VENTES'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.3, 0.7, 0.4, 1
+                on_press: root.manager.current = 'ventes'
+            
+            Button:
+                text: 'NOUVEAU'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.9, 0.5, 0.2, 1
+                on_press: root.manager.current = 'nouvelle_vente'
+
+<ProduitsScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        
+        # En-tête
+        BoxLayout:
+            size_hint_y: 0.1
+            canvas.before:
+                Color:
+                    rgba: get_color_from_hex('#27ae60')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Button:
+                text: '<'
+                size_hint_x: 0.15
+                font_size: dp(20)
+                bold: True
+                background_color: 0.2, 0.7, 0.4, 1
+                on_press: root.manager.current = 'dashboard'
+            
+            Label:
+                text: 'PRODUITS'
+                font_size: dp(18)
+                bold: True
+                color: 1, 1, 1, 1
+            
+            Label:
+                size_hint_x: 0.15
+        
+        # Barre de recherche
+        BoxLayout:
+            size_hint_y: 0.08
+            padding: dp(5)
+            
+            Label:
+                text: '🔍'
+                size_hint_x: 0.1
+                font_size: dp(18)
+                color: 1, 1, 1, 1
+            
+            TextInput:
+                id: search_input
+                hint_text: 'Rechercher...'
+                multiline: False
+                size_hint_x: 0.9
+                background_color: 1, 1, 1, 1
+                foreground_color: 0, 0, 0, 1
+        
+        # Liste des produits
+        ScrollView:
+            size_hint_y: 0.77
+            do_scroll_x: False
+            
+            GridLayout:
+                id: produits_grid
+                cols: 2
+                spacing: dp(5)
+                padding: dp(5)
+                size_hint_y: None
+                height: self.minimum_height
+        
+        # Barre de navigation
+        BoxLayout:
+            size_hint_y: 0.1
+            spacing: dp(2)
+            canvas.before:
+                Color:
+                    rgba: get_color_from_hex('#34495e')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Button:
+                text: 'ACCUEIL'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.2, 0.6, 0.9, 1
+                on_press: root.manager.current = 'dashboard'
+            
+            Button:
+                text: 'VENTES'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.3, 0.7, 0.4, 1
+                on_press: root.manager.current = 'ventes'
+            
+            Button:
+                text: 'PRODUITS'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.9, 0.5, 0.2, 1
+                on_press: root.manager.current = 'produits'
+
+<ClientsScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        
+        # En-tête
+        BoxLayout:
+            size_hint_y: 0.1
+            canvas.before:
+                Color:
+                    rgba: get_color_from_hex('#e67e22')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Button:
+                text: '<'
+                size_hint_x: 0.15
+                font_size: dp(20)
+                bold: True
+                background_color: 0.8, 0.5, 0.1, 1
+                on_press: root.manager.current = 'dashboard'
+            
+            Label:
+                text: 'CLIENTS'
+                font_size: dp(18)
+                bold: True
+                color: 1, 1, 1, 1
+            
+            Label:
+                size_hint_x: 0.15
+        
+        # Barre de recherche
+        BoxLayout:
+            size_hint_y: 0.08
+            padding: dp(5)
+            
+            Label:
+                text: '🔍'
+                size_hint_x: 0.1
+                font_size: dp(18)
+                color: 1, 1, 1, 1
+            
+            TextInput:
+                id: search_input
+                hint_text: 'Rechercher...'
+                multiline: False
+                size_hint_x: 0.9
+                background_color: 1, 1, 1, 1
+                foreground_color: 0, 0, 0, 1
+        
+        # Liste des clients
+        ScrollView:
+            size_hint_y: 0.77
+            do_scroll_x: False
+            
+            BoxLayout:
+                id: clients_list
+                orientation: 'vertical'
+                spacing: dp(5)
+                padding: dp(10)
+                size_hint_y: None
+                height: self.minimum_height
+        
+        # Barre de navigation
+        BoxLayout:
+            size_hint_y: 0.1
+            spacing: dp(2)
+            canvas.before:
+                Color:
+                    rgba: get_color_from_hex('#34495e')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Button:
+                text: 'ACCUEIL'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.2, 0.6, 0.9, 1
+                on_press: root.manager.current = 'dashboard'
+            
+            Button:
+                text: 'VENTES'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.3, 0.7, 0.4, 1
+                on_press: root.manager.current = 'ventes'
+            
+            Button:
+                text: 'CLIENTS'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.9, 0.5, 0.2, 1
+                on_press: root.manager.current = 'clients'
+
+<AlertesScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        
+        # En-tête
+        BoxLayout:
+            size_hint_y: 0.1
+            canvas.before:
+                Color:
+                    rgba: get_color_from_hex('#e74c3c')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Button:
+                text: '<'
+                size_hint_x: 0.15
+                font_size: dp(20)
+                bold: True
+                background_color: 0.8, 0.3, 0.3, 1
+                on_press: root.manager.current = 'dashboard'
+            
+            Label:
+                text: 'ALERTES'
+                font_size: dp(18)
+                bold: True
+                color: 1, 1, 1, 1
+            
+            Label:
+                size_hint_x: 0.15
+        
+        # Liste des alertes
+        ScrollView:
+            size_hint_y: 0.8
+            do_scroll_x: False
+            
+            BoxLayout:
+                id: alertes_list
+                orientation: 'vertical'
+                spacing: dp(10)
+                padding: dp(10)
+                size_hint_y: None
+                height: self.minimum_height
+        
+        # Barre de navigation
+        BoxLayout:
+            size_hint_y: 0.1
+            spacing: dp(2)
+            canvas.before:
+                Color:
+                    rgba: get_color_from_hex('#34495e')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Button:
+                text: 'ACCUEIL'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.2, 0.6, 0.9, 1
+                on_press: root.manager.current = 'dashboard'
+            
+            Button:
+                text: 'VENTES'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.3, 0.7, 0.4, 1
+                on_press: root.manager.current = 'ventes'
+            
+            Button:
+                text: 'PRODUITS'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.9, 0.5, 0.2, 1
+                on_press: root.manager.current = 'produits'
+
+<ProfilScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        
+        # En-tête
+        BoxLayout:
+            size_hint_y: 0.1
+            canvas.before:
+                Color:
+                    rgba: get_color_from_hex('#9b59b6')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Button:
+                text: '<'
+                size_hint_x: 0.15
+                font_size: dp(20)
+                bold: True
+                background_color: 0.6, 0.4, 0.8, 1
+                on_press: root.manager.current = 'dashboard'
+            
+            Label:
+                text: 'MON PROFIL'
+                font_size: dp(18)
+                bold: True
+                color: 1, 1, 1, 1
+            
+            Label:
+                size_hint_x: 0.15
+        
+        # Contenu
+        ScrollView:
+            size_hint_y: 0.8
+            do_scroll_x: False
+            
+            BoxLayout:
+                orientation: 'vertical'
+                padding: dp(20)
+                spacing: dp(15)
+                size_hint_y: None
+                height: self.minimum_height
+                
+                # Avatar
+                Label:
+                    text: '👤'
+                    font_size: dp(80)
+                    size_hint_y: None
+                    height: dp(120)
+                    color: 1, 1, 1, 1
+                
+                # Nom complet
+                Label:
+                    id: full_name
+                    text: ''
+                    font_size: dp(22)
+                    bold: True
+                    size_hint_y: None
+                    height: dp(40)
+                    color: 1, 1, 1, 1
+                
+                # Rôle
+                Label:
+                    id: role_label
+                    text: ''
+                    font_size: dp(16)
+                    size_hint_y: None
+                    height: dp(30)
+                
+                # Séparateur
+                Widget:
+                    size_hint_y: None
+                    height: dp(20)
+                
+                # Détails dans un cadre
+                BoxLayout:
+                    orientation: 'vertical'
+                    padding: dp(15)
+                    spacing: dp(10)
+                    size_hint_y: None
+                    height: self.minimum_height
+                    canvas.before:
+                        Color:
+                            rgba: get_color_from_hex('#34495e')
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(10)]
+                    
+                    Label:
+                        id: username_detail
+                        text: ''
+                        font_size: dp(14)
+                        size_hint_y: None
+                        height: dp(30)
+                        color: 1, 1, 1, 1
+                    
+                    Label:
+                        id: email_detail
+                        text: ''
+                        font_size: dp(14)
+                        size_hint_y: None
+                        height: dp(30)
+                        color: 1, 1, 1, 1
+                    
+                    Label:
+                        id: id_detail
+                        text: ''
+                        font_size: dp(14)
+                        size_hint_y: None
+                        height: dp(30)
+                        color: 1, 1, 1, 1
+                
+                # Espace
+                Widget:
+                    size_hint_y: None
+                    height: dp(30)
+                
+                # Bouton déconnexion
+                Button:
+                    id: logout_btn
+                    text: '🔓 SE DÉCONNECTER'
+                    size_hint_y: None
+                    height: dp(50)
+                    background_color: 0.8, 0.2, 0.2, 1
+                    font_size: dp(16)
+                    bold: True
+                    on_press: root.logout()
+        
+        # Barre de navigation
+        BoxLayout:
+            size_hint_y: 0.1
+            spacing: dp(2)
+            canvas.before:
+                Color:
+                    rgba: get_color_from_hex('#34495e')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            
+            Button:
+                text: 'ACCUEIL'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.2, 0.6, 0.9, 1
+                on_press: root.manager.current = 'dashboard'
+            
+            Button:
+                text: 'VENTES'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.3, 0.7, 0.4, 1
+                on_press: root.manager.current = 'ventes'
+            
+            Button:
+                text: 'PRODUITS'
+                font_size: dp(14)
+                bold: True
+                background_color: 0.9, 0.5, 0.2, 1
+                on_press: root.manager.current = 'produits'
